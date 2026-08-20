@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./assets/tandem-icon.svg" width="128" height="128" alt="Tandem logo">
+  <img src="./assets/tandem-hero.jpg" width="960" alt="Tandem">
 </p>
 
 <h1 align="center">Tandem</h1>
