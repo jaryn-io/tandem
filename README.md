@@ -37,13 +37,6 @@ Tandem governs the process and makes the proof inspectable. It does not
 promise that every result is correct without judgement; it makes judgement
 possible.
 
-## Read a real session first
-
-Complete records of real sessions, every message, in the same shape you get
-on your own machine: [`sessions/`](./sessions). Four records, from a
-ten-minute build to a release-readiness tool with fifteen findings. Proof
-you can read, not claims.
-
 **From a real session**
 
 > **Brief** — Create a simple responsive currency converter: enter an
