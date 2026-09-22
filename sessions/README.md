@@ -26,6 +26,7 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 
 | Record | Date | In one line | Language |
 |---|---|---|---|
+| [`2026-08-30-forgedesk-2`](2026-08-30-forgedesk-2/00-summary.md) | 30 Aug 2026 | ForgeDesk inherited, verified and completed: two HIGH authorisation findings found by a second model family, fixed, re-verified by a third; final audit passed; 27,800 lines, 174 tests | IT, translated where human |
 | [`2026-09-05-shiftboard`](2026-09-05-shiftboard/00-summary.md) | 5 Sep 2026 | A visual production planner from a thirteen-requirement brief: seven roles, seven findings in two correction cycles, one word from the person after the brief; 50 minutes, no flagship model | EN |
 | [`2026-09-07-api-contract-explorer`](2026-09-07-api-contract-explorer/00-summary.md) | 7 Sep 2026 | An OpenAPI explorer whose Compare and Export views broke on the first click: two high findings from a Reviewer that replaced a failed one mid-session, three security findings, all fixed and re-verified; 50 minutes | EN |
 | [`2026-09-07-shipgate`](2026-09-07-shipgate/00-summary.md) | 7 Sep 2026 | A release-readiness tool from a six-sentence brief: fifteen findings in four correction cycles, one reviewer attempt timed out and the session re-routed itself, one word from the person; 1h50, no flagship model | EN |
