@@ -20,7 +20,7 @@ A person writes a brief. A planning role turns it into steps with owners and dep
 
 ## Redaction rule
 
-What you see is the work and the outcome. Internal paths, identifiers, hashes and transport are removed, and so is every sentence in which a role describes the runtime's own mechanics rather than the work; database files are listed by count, not by name. Nothing else is rewritten. Correction steps added during a session are numbered G-1, G-2… in order of creation. Where a message was written in Italian, it is kept in Italian and collapsed; briefs and human messages in Italian carry a translation with the original underneath. Model names stay: they are part of the proof.
+What you see is the work and the outcome. Internal paths, identifiers, hashes and transport are removed, and so is every sentence in which a role describes the system's own mechanics rather than the work; database files are listed by count, not by name. Nothing else is rewritten. Correction steps added during a session are numbered G-1, G-2… in order of creation. Where a message was written in Italian, it is kept in Italian and collapsed; briefs and human messages in Italian carry a translation with the original underneath. Model names stay: they are part of the proof.
 
 ## Sessions
 
@@ -33,7 +33,7 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 
 ## What is not here
 
-The models' prompts and the mechanics of the runtime are not part of the record, on purpose. The deliverables (the applications themselves) are not in this repository.
+The models' prompts and the mechanics of the system are not part of the record, on purpose. The deliverables (the applications themselves) are not in this repository.
 
 Questions and design-partner requests: tandem@jaryn.io
 
