@@ -1,6 +1,6 @@
 # Summary · QueueLens: a first version that looked complete, and what independent checks found
 
-**In one line.** A person writes a nine-requirement brief, approves the plan with one word, and comes back forty minutes later to a finished application: six problems found by two independent roles, corrected, re-verified, and traced back to the brief by a final audit. Six models, none of them a flagship: 44 messages, 0h40, 1.65M tokens.
+**In one line.** A person writes a nine-requirement brief, approves the plan with one word, and comes back forty minutes later to a finished application: six problems found by two independent roles, corrected, re-verified, and traced back to the brief by a final audit. Six roles on four models, none of them a flagship: 44 messages, 0h40, 1.65M tokens.
 
 **Language.** Everything is in English as written. Role outputs are the roles' own text.
 
