@@ -17,7 +17,7 @@ It is the clearest example of the point: the role that produces never certifies 
 
 ## The application
 
-The ForgeDesk application accepted at closeout is published as delivered, with its 174 tests, at [`jaryn-io/forgedesk-example`](https://github.com/jaryn-io/forgedesk-example). Run it with one command and check the record against the code.
+The ForgeDesk application accepted at closeout is published as delivered, with its 174 tests, at [`examples/forgedesk-2`](../../examples/forgedesk-2). Run it with one command and check the record against the code.
 
 ## Files
 

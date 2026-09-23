@@ -1,0 +1,43 @@
+"""Machines, Categories, and Maintenance Windows domain package for ForgeDesk."""
+
+from forgedesk.machines.service import (
+    VALID_MACHINE_STATES,
+    VALID_MAINTENANCE_STATUSES,
+    change_machine_state,
+    change_maintenance_window_status,
+    check_machine_availability,
+    create_machine,
+    create_maintenance_window,
+    delete_machine,
+    delete_maintenance_window,
+    get_machine_by_code,
+    get_machine_by_id,
+    get_machines_summary_stats,
+    get_maintenance_window_by_id,
+    list_machines,
+    list_maintenance_windows,
+    retire_machine,
+    update_machine,
+    update_maintenance_window,
+)
+
+__all__ = [
+    "VALID_MACHINE_STATES",
+    "VALID_MAINTENANCE_STATUSES",
+    "list_machines",
+    "get_machine_by_id",
+    "get_machine_by_code",
+    "get_machines_summary_stats",
+    "create_machine",
+    "update_machine",
+    "change_machine_state",
+    "retire_machine",
+    "delete_machine",
+    "list_maintenance_windows",
+    "get_maintenance_window_by_id",
+    "create_maintenance_window",
+    "update_maintenance_window",
+    "change_maintenance_window_status",
+    "delete_maintenance_window",
+    "check_machine_availability",
+]

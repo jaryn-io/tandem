@@ -24,17 +24,17 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 
 ## Sessions
 
-| Record | Date | In one line | Language |
-|---|---|---|---|
-| [`2026-08-30-forgedesk-2`](2026-08-30-forgedesk-2/00-summary.md) | 30 Aug 2026 | ForgeDesk inherited, verified and completed: two HIGH authorisation findings found by a second model family, fixed, re-verified by a third; final audit passed; 27,800 lines, 174 tests | IT, translated where human |
-| [`2026-09-05-shiftboard`](2026-09-05-shiftboard/00-summary.md) | 5 Sep 2026 | A visual production planner from a thirteen-requirement brief: seven roles, seven findings in two correction cycles, one word from the person after the brief; 50 minutes, no flagship model | EN |
-| [`2026-09-07-api-contract-explorer`](2026-09-07-api-contract-explorer/00-summary.md) | 7 Sep 2026 | An OpenAPI explorer whose Compare and Export views broke on the first click: two high findings from a Reviewer that replaced a failed one mid-session, three security findings, all fixed and re-verified; 50 minutes | EN |
-| [`2026-09-07-shipgate`](2026-09-07-shipgate/00-summary.md) | 7 Sep 2026 | A release-readiness tool from a six-sentence brief: fifteen findings in four correction cycles, one reviewer attempt timed out and the session re-routed itself, one word from the person; 1h50, no flagship model | EN |
-| [`2026-09-06-queuelens`](2026-09-06-queuelens/00-summary.md) | 6 Sep 2026 | A support-backlog explorer whose first version looked complete: six findings from two independent roles, one of them on the brief's central requirement, all corrected and re-verified; 40 minutes, no flagship model | EN |
+| Record | Date | In one line | Language | Application |
+|---|---|---|---|---|
+| [`2026-08-30-forgedesk-2`](2026-08-30-forgedesk-2/00-summary.md) | 30 Aug 2026 | ForgeDesk inherited, verified and completed: two HIGH authorisation findings found by a second model family, fixed, re-verified by a third; final audit passed; 27,800 lines, 174 tests | IT, translated where human | [`examples/forgedesk-2`](../examples/forgedesk-2) |
+| [`2026-09-05-shiftboard`](2026-09-05-shiftboard/00-summary.md) | 5 Sep 2026 | A visual production planner from a thirteen-requirement brief: seven roles, seven findings in two correction cycles, one word from the person after the brief; 50 minutes, no flagship model | EN | not yet |
+| [`2026-09-07-api-contract-explorer`](2026-09-07-api-contract-explorer/00-summary.md) | 7 Sep 2026 | An OpenAPI explorer whose Compare and Export views broke on the first click: two high findings from a Reviewer that replaced a failed one mid-session, three security findings, all fixed and re-verified; 50 minutes | EN | not yet |
+| [`2026-09-07-shipgate`](2026-09-07-shipgate/00-summary.md) | 7 Sep 2026 | A release-readiness tool from a six-sentence brief: fifteen findings in four correction cycles, one reviewer attempt timed out and the session re-routed itself, one word from the person; 1h50, no flagship model | EN | not yet |
+| [`2026-09-06-queuelens`](2026-09-06-queuelens/00-summary.md) | 6 Sep 2026 | A support-backlog explorer whose first version looked complete: six findings from two independent roles, one of them on the brief's central requirement, all corrected and re-verified; 40 minutes, no flagship model | EN | not yet |
 
 ## What is not here
 
-The models' prompts and the mechanics of the system are not part of the record, on purpose. The applications themselves are published separately, as delivered, when they are: ForgeDesk 2 is at [`jaryn-io/forgedesk-example`](https://github.com/jaryn-io/forgedesk-example).
+The models' prompts and the mechanics of the system are not part of the record, on purpose. The applications themselves live in [`examples/`](../examples), published as delivered, each one linked to its session record.
 
 Questions and design-partner requests: tandem@jaryn.io
 
