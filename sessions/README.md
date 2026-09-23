@@ -31,6 +31,7 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 | [`2026-09-07-api-contract-explorer`](2026-09-07-api-contract-explorer/00-summary.md) | 7 Sep 2026 | An OpenAPI explorer whose Compare and Export views broke on the first click: two high findings from a Reviewer that replaced a failed one mid-session, three security findings, all fixed and re-verified; 50 minutes | EN | not yet |
 | [`2026-09-07-shipgate`](2026-09-07-shipgate/00-summary.md) | 7 Sep 2026 | A release-readiness tool from a six-sentence brief: fifteen findings in four correction cycles, one reviewer attempt timed out and the session re-routed itself, one word from the person; 1h50, no flagship model | EN | not yet |
 | [`2026-09-06-queuelens`](2026-09-06-queuelens/00-summary.md) | 6 Sep 2026 | A support-backlog explorer whose first version looked complete: six findings from two independent roles, one of them on the brief's central requirement, all corrected and re-verified; 40 minutes, no flagship model | EN | [`examples/queuelens`](../examples/queuelens) |
+| [`2026-09-23-pricelist-import`](2026-09-23-pricelist-import/00-summary.md) | 23 Sep 2026 | A supplier price-list importer from a twelve-line brief: six roles from five model families, one question to the person (a missing package), seven findings closed, and a final audit that found a gap in the review's coverage rather than in the code; 1h34 | EN | [`examples/pricelist-import`](../examples/pricelist-import) |
 
 ## What is not here
 

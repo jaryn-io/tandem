@@ -1,0 +1,15 @@
+{
+  "supplier_id": "acme",
+  "format": "csv",
+  "csv": {"delimiter": ";", "encoding": "utf-8-sig"},
+  "columns": {
+    "article_code": "Codice",
+    "description": "Descrizione",
+    "price": "Prezzo",
+    "currency": "Valuta"
+  },
+  "decimal": {"decimal_separator": ",", "thousands_separator": "."},
+  "code_normalization": {"strip_prefix": "AC-", "strip_whitespace": true, "uppercase": true},
+  "code_pattern": "^[A-Z0-9]+$",
+  "defaults": {"currency": "EUR"}
+}

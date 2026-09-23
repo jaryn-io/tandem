@@ -40,7 +40,7 @@ possible.
 ## Read a real session first
 
 Complete records of real sessions, every message, in the same shape you get
-on your own machine: [`sessions/`](./sessions). Four records, from a
+on your own machine: [`sessions/`](./sessions). Six records, from a
 forty-minute build to a release-readiness tool with fifteen findings. Proof
 you can read, not claims.
 

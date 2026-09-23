@@ -1,0 +1,14 @@
+{
+  "supplier_id": "nordwind",
+  "format": "xlsx",
+  "xlsx": {"sheet": "Listino", "header_row": 2},
+  "columns": {
+    "article_code": "Artikel-Nr.",
+    "description": "Bezeichnung",
+    "price": "Preis (EUR)"
+  },
+  "decimal": {"decimal_separator": "."},
+  "code_normalization": {"strip_whitespace": true, "uppercase": true},
+  "code_pattern": "^NW-\\d{4}$",
+  "defaults": {"currency": "EUR"}
+}

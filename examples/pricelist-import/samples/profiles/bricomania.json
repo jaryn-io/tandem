@@ -1,0 +1,15 @@
+{
+  "supplier_id": "bricomania",
+  "format": "csv",
+  "csv": {"delimiter": "|", "encoding": "latin-1", "skip_rows": 1},
+  "columns": {
+    "article_code": "Cod.",
+    "description": "Articolo",
+    "price": "Prezzo",
+    "currency": "Val."
+  },
+  "decimal": {"decimal_separator": ","},
+  "code_normalization": {"strip_whitespace": true, "uppercase": true},
+  "code_pattern": "^[A-Z0-9-]+$",
+  "defaults": {"currency": "EUR"}
+}
