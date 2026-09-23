@@ -15,6 +15,10 @@
 
 It is the clearest example of the point: the role that produces never certifies its own work, a different model family finds the error, the fix is verified by a third, and what stays open is written down rather than forgotten.
 
+## The application
+
+The ForgeDesk application accepted at closeout is published as delivered, with its 174 tests, at [`jaryn-io/forgedesk-example`](https://github.com/jaryn-io/forgedesk-example). Run it with one command and check the record against the code.
+
 ## Files
 
 `00-brief.md` · `01-plan.md` · `02-record.md` · `03-findings.md` · `04-closeout.md` · `05-positive-memory.md`

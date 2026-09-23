@@ -34,7 +34,7 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 
 ## What is not here
 
-The models' prompts and the mechanics of the system are not part of the record, on purpose. The deliverables (the applications themselves) are not in this repository.
+The models' prompts and the mechanics of the system are not part of the record, on purpose. The applications themselves are published separately, as delivered, when they are: ForgeDesk 2 is at [`jaryn-io/forgedesk-example`](https://github.com/jaryn-io/forgedesk-example).
 
 Questions and design-partner requests: tandem@jaryn.io
 
