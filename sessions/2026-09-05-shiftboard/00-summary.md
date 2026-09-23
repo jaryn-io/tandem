@@ -21,6 +21,10 @@ Jobs with quantities, due dates, priorities and ordered operations; machines wit
 
 A brief this size is where a first version is most likely to look right and be wrong in the details a planner would hit on day one. Two of the seven findings were exactly that, and the record shows who found them, how they were fixed, and who checked.
 
+## The application
+
+The application accepted at closeout is published as delivered, with its 19 tests, at [`examples/shiftboard`](../../examples/shiftboard). Run it with one command and check the record against the code.
+
 ## Files
 
 `00-brief.md` · `01-plan.md` · `02-record.md` · `03-findings.md` · `04-closeout.md` · `05-positive-memory.md`

@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "timestamp": "2026-09-05T20:00:00.000Z",
+  "workshopName": "AeroPrecision Lab <script>window.__xss_detected=true</script>",
+  "machines": [
+    {
+      "id": "M1",
+      "name": "Haas UMC-750 <img src=x onerror=\"window.__xss_detected=true\">",
+      "shortName": "5-Axis Mill <svg onload=\"window.__xss_detected=true\">",
+      "code": "UMC-750",
+      "workCenter": "5-Axis Milling <iframe src=\"javascript:window.__xss_detected=true\">",
+      "hourlyRate": 145,
+      "color": "#2563eb",
+      "description": "Center <b onmouseover=\"window.__xss_detected=true\">hover</b>"
+    }
+  ],
+  "outages": [
+    {
+      "id": "OUT-01",
+      "machineId": "M1",
+      "title": "Spindle Maintenance <script>window.__xss_detected=true</script>",
+      "reason": "Vibration check <img src=x onerror=\"window.__xss_detected=true\">",
+      "dayIndex": 1,
+      "startSlot": 28,
+      "endSlot": 35,
+      "type": "maintenance"
+    }
+  ],
+  "jobs": [
+    {
+      "id": "JOB-101",
+      "customer": "Apex Aero <script>window.__xss_detected=true</script>",
+      "partName": "Impeller Bracket <img src=x onerror=\"window.__xss_detected=true\">",
+      "quantity": 20,
+      "dueDateSlot": 50,
+      "priority": "HIGH",
+      "color": "#2563eb"
+    }
+  ],
+  "operations": [
+    {
+      "id": "OP-101-1",
+      "jobId": "JOB-101",
+      "seq": 10,
+      "name": "5-Axis Roughing <svg onload=\"window.__xss_detected=true\"><script>window.__xss_detected=true</script>",
+      "machineId": "M1",
+      "setupHours": 0.5,
+      "runHours": 2,
+      "startSlot": 0,
+      "endSlot": 4
+    }
+  ]
+}

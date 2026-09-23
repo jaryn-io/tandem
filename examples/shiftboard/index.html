@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShiftBoard — Visual Production Scheduling & Dispatch</title>
+  <meta name="description" content="A self-contained visual planning application for a small manufacturer scheduling jobs across shared machines.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       Application Header
+       ========================================================================== -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="brand-icon" aria-hidden="true">⚙</div>
+      <div>
+        <div class="brand-title">
+          ShiftBoard
+          <span class="brand-badge">Manufacturing OS</span>
+        </div>
+        <div class="brand-subtitle">Visual Workshop Job Scheduling & Capacity Planning</div>
+      </div>
+    </div>
+
+    <!-- Actions & Toolbar -->
+    <div class="header-actions">
+      <!-- Auto Scheduling & History -->
+      <div class="action-group">
+        <button id="btn-propose" class="btn btn-primary" title="Calculate and apply priority-based heuristic schedule">
+          <span>⚡</span>
+          <span>Propose Schedule</span>
+        </button>
+        <button id="btn-undo" class="btn btn-outline" title="Undo last action (Ctrl+Z)" disabled>
+          <span>↺</span>
+          <span>Undo</span>
+        </button>
+        <button id="btn-redo" class="btn btn-outline" title="Redo last action (Ctrl+Y)" disabled>
+          <span>↻</span>
+          <span>Redo</span>
+        </button>
+      </div>
+
+      <!-- Scenarios Demonstration -->
+      <div class="action-group">
+        <button id="btn-scenario-urgent" class="btn btn-scenario-urgent" title="Simulate emergency customer order competing for machine capacity">
+          <span>⚡</span>
+          <span>Simulate Urgent Order</span>
+        </button>
+        <button id="btn-scenario-outage" class="btn btn-scenario" title="Simulate machine breakdown / extended maintenance window">
+          <span>🔧</span>
+          <span>Simulate Extended Outage</span>
+        </button>
+        <button id="btn-restore-demo" class="btn btn-outline" title="Reset board to the original demo baseline">
+          <span>⟲</span>
+          <span>Restore Demo</span>
+        </button>
+      </div>
+
+      <!-- Plan Persistence & Export -->
+      <div class="action-group">
+        <button id="btn-save-plan" class="btn btn-outline" title="Save plan to local JSON file & browser storage">
+          <span>💾</span>
+          <span>Save</span>
+        </button>
+        <button id="btn-load-plan" class="btn btn-outline" title="Reopen a saved plan from JSON file">
+          <span>📂</span>
+          <span>Open</span>
+        </button>
+        <input type="file" id="file-input" accept=".json" style="display: none;">
+        <button id="btn-export" class="btn btn-outline" title="Export schedule to Markdown or CSV dispatch report">
+          <span>📑</span>
+          <span>Export</span>
+        </button>
+      </div>
+
+      <!-- Documentation & Panels -->
+      <div class="action-group">
+        <button id="btn-help" class="btn btn-outline" title="Walkthrough, engine rules, assumptions, and licensing">
+          <span>📖</span>
+          <span>Walkthrough & Docs</span>
+        </button>
+        <button id="btn-toggle-drawer" class="btn btn-outline btn-icon-only" title="Toggle Inspector / Details Drawer">
+          <span>☰</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       KPI Ribbon (Metrics & Delivery Indicators)
+       ========================================================================== -->
+  <section class="kpi-ribbon" aria-label="Workshop Performance Indicators">
+    <div class="kpi-cards">
+      <!-- 1. Workshop Utilization -->
+      <div class="kpi-card" id="card-kpi-utilization">
+        <div class="kpi-icon" style="color: var(--accent-emerald);">📊</div>
+        <div class="kpi-content" style="min-width: 120px;">
+          <div class="kpi-label">Workshop Utilization</div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpi-utilization-val">0.0%</span>
+            <span class="kpi-subtext">of operating hours</span>
+          </div>
+          <div class="kpi-utilization-bar">
+            <div class="kpi-utilization-fill" id="kpi-utilization-fill" style="width: 0%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. On-Time Delivery -->
+      <div class="kpi-card" id="card-kpi-ontime">
+        <div class="kpi-icon" style="color: var(--accent-blue);">🎯</div>
+        <div class="kpi-content">
+          <div class="kpi-label">On-Time Orders</div>
+          <div class="kpi-value-row">
+            <span class="kpi-value kpi-badge-ok" id="kpi-ontime-val">100%</span>
+            <span class="kpi-subtext" id="kpi-ontime-subtext">8 / 8 jobs</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Late Orders -->
+      <div class="kpi-card" id="card-kpi-late">
+        <div class="kpi-icon" style="color: var(--accent-amber);">⏱</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Late Orders</div>
+          <div class="kpi-value-row">
+            <span class="kpi-value kpi-badge-ok" id="kpi-late-val">0</span>
+            <span class="kpi-subtext" id="kpi-late-subtext">Zero overdue</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Conflicts Detected -->
+      <div class="kpi-card" id="card-kpi-conflicts">
+        <div class="kpi-icon" style="color: var(--status-critical);">⚠️</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Active Conflicts</div>
+          <div class="kpi-value-row">
+            <span class="kpi-value kpi-badge-ok" id="kpi-conflicts-val">0</span>
+            <span class="kpi-subtext" id="kpi-conflicts-subtext">All constraints met</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Unscheduled Work -->
+      <div class="kpi-card" id="card-kpi-unscheduled">
+        <div class="kpi-icon" style="color: var(--accent-purple);">📦</div>
+        <div class="kpi-content">
+          <div class="kpi-label">Unscheduled Ops</div>
+          <div class="kpi-value-row">
+            <span class="kpi-value" id="kpi-unscheduled-val">0</span>
+            <span class="kpi-subtext">in dispatch queue</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transparent Formula Guide Button -->
+    <button id="btn-kpi-info" class="btn btn-outline" style="font-size: 11px;">
+      <span>ℹ</span>
+      <span>KPI Formulas & Definitions</span>
+    </button>
+  </section>
+
+  <!-- ==========================================================================
+       Notification & Reschedule Banner
+       ========================================================================== -->
+  <div id="notification-banner" class="notification-banner" style="display: none;">
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <span style="font-size: 16px;">ℹ</span>
+      <span id="notification-text">Notification message</span>
+    </div>
+    <div class="notification-actions">
+      <button id="btn-notification-action" class="btn btn-primary" style="display: none; padding: 3px 8px; font-size: 11px;">
+        <span id="notification-action-icon">⚡</span>
+        <span id="notification-action-text">Auto-Resolve</span>
+      </button>
+      <button id="btn-notification-undo" class="btn btn-outline" style="display: none; padding: 3px 8px; font-size: 11px;">
+        <span>↺</span>
+        <span id="notification-undo-text">Undo</span>
+      </button>
+      <button id="btn-notification-dismiss" class="btn btn-outline btn-icon-only" style="padding: 3px 6px; font-size: 11px;" title="Dismiss">✕</button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Main Workspace
+       ========================================================================== -->
+  <main class="app-body">
+    <div class="main-content">
+      <!-- Toolbar above Schedule -->
+      <div class="timeline-toolbar">
+        <div class="timeline-legend">
+          <span style="font-weight: 700; color: #fff; margin-right: 4px;">Schedule Key:</span>
+          <div class="legend-item">
+            <div class="legend-swatch swatch-setup"></div>
+            <span>Cross-hatch = Setup Time (Non-run)</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch swatch-outage"></div>
+            <span>Red Stripe = Planned Machine Outage</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-swatch swatch-conflict"></div>
+            <span>Red Outline = Active Conflict</span>
+          </div>
+          <div class="legend-item">
+            <span style="font-size: 11px;">⚡ Urgent</span>
+            <span style="font-size: 11px;">▲ High</span>
+            <span style="font-size: 11px;">● Normal</span>
+            <span style="font-size: 11px;">▼ Low</span>
+          </div>
+        </div>
+
+        <div style="font-size: 11px; color: var(--text-muted);">
+          Tip: <strong>Drag & Drop</strong> any block to move; <strong>Hover</strong> to highlight sister job operations.
+        </div>
+      </div>
+
+      <!-- Schedule Board (Visual Center) -->
+      <div class="schedule-container" id="schedule-container">
+        <div class="schedule-grid" id="schedule-grid">
+          <!-- Dynamically populated by app.js -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ==========================================================================
+         Side Drawer / Inspector & Operations Queue
+         ========================================================================== -->
+    <aside class="side-drawer" id="side-drawer">
+      <div class="drawer-header">
+        <div class="drawer-title">
+          <span>📋</span>
+          <span>Workshop Inspector</span>
+        </div>
+        <button id="btn-close-drawer" class="btn btn-outline btn-icon-only" title="Collapse Drawer">✕</button>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="drawer-tabs">
+        <button class="drawer-tab active" data-tab="inspector">
+          <span>Details</span>
+        </button>
+        <button class="drawer-tab" data-tab="unscheduled">
+          <span>Unscheduled</span>
+          <span class="tab-badge" id="badge-unscheduled-count">0</span>
+        </button>
+        <button class="drawer-tab" data-tab="conflicts">
+          <span>Conflicts</span>
+          <span class="tab-badge" id="badge-conflicts-count">0</span>
+        </button>
+        <button class="drawer-tab" data-tab="jobs">
+          <span>Jobs</span>
+        </button>
+        <button class="drawer-tab" data-tab="machines">
+          <span>Machines</span>
+        </button>
+      </div>
+
+      <!-- Tab Dynamic Content -->
+      <div class="drawer-body" id="drawer-body">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </aside>
+  </main>
+
+  <!-- ==========================================================================
+       Modals
+       ========================================================================== -->
+
+  <!-- Modal: KPI Formulas & Math Guide -->
+  <div class="modal-overlay" id="modal-kpi" role="dialog" aria-modal="true" aria-labelledby="modal-kpi-title">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-kpi-title">
+          <span>📊</span>
+          <span>KPI Mathematical Definitions & Calculations</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Injected dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-close-modal">Understood</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Walkthrough & System Documentation -->
+  <div class="modal-overlay" id="modal-help" role="dialog" aria-modal="true" aria-labelledby="modal-help-title">
+    <div class="modal-content" style="max-width: 860px;">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-help-title">
+          <span>📖</span>
+          <span>ShiftBoard User Guide, Scheduling Rules & Architecture</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <h3>1. Fictional Workshop Walkthrough (AeroPrecision Machining Lab)</h3>
+        <p>AeroPrecision is a precision contract manufacturer producing mission-critical parts across 5 shared machine centers over a 5-day standard working week (Monday through Friday, 08:00 – 17:00, 45 operating hours total).</p>
+        <ul>
+          <li><strong>M1 — Haas UMC-750 (5-Axis Mill):</strong> Precision multi-surface contouring for aerospace parts. Has a planned spindle PM on Tuesday afternoon (13:00–17:00).</li>
+          <li><strong>M2 — Haas VF-2SS (3-Axis Mill):</strong> High-speed milling for prismatic parts, bolt patterns, and pocketing.</li>
+          <li><strong>M3 — Doosan Lynx 2100 (CNC Lathe):</strong> Precision cylindrical turning, threading, and boring.</li>
+          <li><strong>M4 — Amada Ensis 3015 (Fiber Laser):</strong> Profile laser blanking and plate stock preparation.</li>
+          <li><strong>M5 — Zeiss DuraMax (CMM Metrology):</strong> Quality assurance, surface roughness, and dimensional certification.</li>
+        </ul>
+
+        <h3>2. Scheduling Engine Principles & Constraints</h3>
+        <ul>
+          <li><strong>Working Calendar & Shift Boundaries:</strong> The shop operates strictly Monday through Friday 08:00–17:00 (18 thirty-minute slots per day, 90 slots across the week). Work pauses overnight (17:00 to 08:00 next morning) and resumes automatically. When an operation spans across 17:00, the schedule displays a <em>Cont. &lt;Day&gt;</em> indicator badge, and non-working overnight time is not counted against duration.</li>
+          <li><strong>Setup Time Treatment:</strong> Every operation explicitly specifies both Setup Hours and Run Hours. Setup occurs during the initial slots on the assigned machine before production run. Setup occupies machine capacity and is visually distinguished by diagonal cross-hatching and a wrench indicator.</li>
+          <li><strong>Precedence Constraints:</strong> For every job, manufacturing operations must execute in strictly sequential order (e.g. Op 10 must complete before Op 20 can begin). If a user drags an operation earlier than its predecessor, a critical <em>Precedence Violation</em> conflict is flagged.</li>
+          <li><strong>Machine Capacity Limits:</strong> Each machine is a single-spindle resource: at most one operation can occupy the machine at any time slot. Collisions trigger a <em>Machine Overlap Conflict</em>.</li>
+          <li><strong>Planned Outages:</strong> Outages block machine capacity. Any operation scheduled during an outage generates an <em>Outage Collision Conflict</em>.</li>
+          <li><strong>Unscheduled Work Handling:</strong> Work that cannot be placed within the available 45-hour weekly horizon remains clearly visible in the <em>Unscheduled Work</em> queue.</li>
+        </ul>
+
+        <h3>3. Reproducible Demonstration Scenarios</h3>
+        <ul>
+          <li><strong>⚡ Simulate Urgent Order:</strong> Injects an emergency aircraft part (<code>JOB-901: A320 Flap Actuator Mount</code>) due Wednesday noon. This creates direct capacity competition across Lathe M3, Mill M1, and CMM M5. Notice how it collides with M1's planned outage and competing jobs! Click <em>Propose Schedule</em> to see how high priority rearranges the board.</li>
+          <li><strong>🔧 Simulate Extended Outage:</strong> Extends the Haas UMC-750 maintenance window through Wednesday noon. Watch the conflict diagnosis panel immediately flag colliding operations with suggested remedies.</li>
+          <li><strong>⟲ Restore Demo:</strong> One-click reset restores the workshop back to its baseline schedule. Full multi-level Undo (Ctrl+Z) and Redo (Ctrl+Y) are supported for all actions!</li>
+        </ul>
+
+        <h3>4. Accessibility & Non-Color Indicators</h3>
+        <p>ShiftBoard does not rely solely on color to communicate status: distinct icons (⚡ Urgent, ▲ High, ● Normal, ▼ Low), explicit text chips ([ON TIME], [LATE +3h], [⚠ CONFLICT]), cross-hatched setup stripes, and hazard hazard stripes for outages guarantee immediate readability across all visual capabilities.</p>
+
+        <h3>5. Local Startup & Licensing</h3>
+        <p>ShiftBoard is 100% self-contained. It requires zero external web services, CDNs, accounts, or background databases. Simply open <code>index.html</code> in any modern browser, or launch via <code>python3 -m http.server 8080</code>.</p>
+        <p>Licensed under the <strong>MIT License</strong>. Copyright &copy; 2026 ShiftBoard Open Project.</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary btn-close-modal">Close Guide</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export Schedule & Timetable -->
+  <div class="modal-overlay" id="modal-export" role="dialog" aria-modal="true" aria-labelledby="modal-export-title">
+    <div class="modal-content" style="max-width: 820px;">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-export-title">
+          <span>📑</span>
+          <span>Export Production Schedule & Dispatch Report</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-close-modal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-primary" id="btn-copy-md">Copy Markdown</button>
+          <button class="btn btn-outline" id="btn-download-md">Download .md</button>
+          <button class="btn btn-outline" id="btn-copy-csv">Copy CSV</button>
+          <button class="btn btn-outline" id="btn-download-csv">Download .csv</button>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 4px;">Markdown Timetable Preview:</div>
+        <pre class="output-preview" id="export-md-preview"></pre>
+
+        <div style="font-size: 12px; font-weight: 700; color: #fff; margin-top: 12px; margin-bottom: 4px;">CSV Operations Data Preview:</div>
+        <pre class="output-preview" id="export-csv-preview" style="max-height: 160px;"></pre>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline btn-close-modal">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Add Job Form -->
+  <div class="modal-overlay" id="modal-add-job" role="dialog" aria-modal="true" aria-labelledby="modal-add-job-title">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-add-job-title">
+          <span>＋</span>
+          <span>Add Customer Job</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-close-modal">✕</button>
+      </div>
+      <form id="form-add-job">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="input-job-id">Job ID / Work Order</label>
+            <input type="text" class="form-input" id="input-job-id" placeholder="JOB-109" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-job-customer">Customer Name</label>
+            <input type="text" class="form-input" id="input-job-customer" placeholder="Acme Aerospace" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-job-part">Part Description</label>
+            <input type="text" class="form-input" id="input-job-part" placeholder="Hydraulic Flange" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+              <label class="form-label" for="input-job-qty">Quantity</label>
+              <input type="number" class="form-input" id="input-job-qty" value="25" min="1" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-job-priority">Priority</label>
+              <select class="form-select" id="input-job-priority">
+                <option value="URGENT">⚡ Urgent</option>
+                <option value="HIGH">▲ High</option>
+                <option value="NORMAL" selected>● Normal</option>
+                <option value="LOW">▼ Low</option>
+              </select>
+            </div>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="form-group">
+              <label class="form-label" for="input-job-due-day">Due Day</label>
+              <select class="form-select" id="input-job-due-day">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4" selected>Friday</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-job-due-hour">Due Hour</label>
+              <select class="form-select" id="input-job-due-hour">
+                <option value="10">10:00</option>
+                <option value="12">12:00</option>
+                <option value="14">14:00</option>
+                <option value="16">16:00</option>
+                <option value="17" selected>17:00 (End of Shift)</option>
+              </select>
+            </div>
+          </div>
+          <p style="font-size: 11px; color: var(--text-muted);">New jobs are placed in the Unscheduled queue with sample manufacturing operations ready for placement.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Create Job</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Outage Form -->
+  <div class="modal-overlay" id="modal-add-outage" role="dialog" aria-modal="true" aria-labelledby="modal-add-outage-title">
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-add-outage-title">
+          <span>🔧</span>
+          <span>Schedule Machine Outage</span>
+        </div>
+        <button class="btn btn-outline btn-icon-only btn-close-modal">✕</button>
+      </div>
+      <form id="form-add-outage">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="input-outage-machine">Target Machine</label>
+            <select class="form-select" id="input-outage-machine">
+              <option value="M1">Haas UMC-750 (5-Axis Mill)</option>
+              <option value="M2">Haas VF-2SS (3-Axis Mill)</option>
+              <option value="M3">Doosan Lynx 2100 (CNC Lathe)</option>
+              <option value="M4">Amada Ensis 3015 (Fiber Laser)</option>
+              <option value="M5">Zeiss DuraMax (CMM Metrology)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-outage-title">Outage Title</label>
+            <input type="text" class="form-input" id="input-outage-title" placeholder="Scheduled Calibration" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="input-outage-reason">Reason & Description</label>
+            <input type="text" class="form-input" id="input-outage-reason" placeholder="Laser optics cleaning and alignment" required>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+            <div class="form-group">
+              <label class="form-label" for="input-outage-day">Day</label>
+              <select class="form-select" id="input-outage-day">
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3" selected>Thursday</option>
+                <option value="4">Friday</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-outage-start">Start Hour</label>
+              <select class="form-select" id="input-outage-start">
+                <option value="8">08:00</option>
+                <option value="10">10:00</option>
+                <option value="12" selected>12:00</option>
+                <option value="14">14:00</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="input-outage-end">End Hour</label>
+              <select class="form-select" id="input-outage-end">
+                <option value="10">10:00</option>
+                <option value="12">12:00</option>
+                <option value="14">14:00</option>
+                <option value="16" selected>16:00</option>
+                <option value="17">17:00</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline btn-close-modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Add Outage</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="engine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

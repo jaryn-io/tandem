@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "workshopName": "Workshop",
+  "injected_evil_field": "malicious_content",
+  "machines": [
+    {
+      "id": "M1",
+      "name": "Mill",
+      "shortName": "M1",
+      "code": "M1",
+      "workCenter": "Milling",
+      "hourlyRate": 100,
+      "color": "#2563eb",
+      "unknown_machine_attr": 42
+    }
+  ],
+  "outages": [],
+  "jobs": [
+    {
+      "id": "JOB-1",
+      "customer": "Cust",
+      "partName": "Part",
+      "quantity": 10,
+      "dueDateSlot": 20,
+      "priority": "NORMAL",
+      "color": "#2563eb"
+    }
+  ],
+  "operations": [
+    {
+      "id": "OP-1",
+      "jobId": "JOB-1",
+      "seq": 1,
+      "name": "Cut",
+      "machineId": "M1",
+      "setupHours": 0,
+      "runHours": 1,
+      "startSlot": 0,
+      "endSlot": 1
+    }
+  ]
+}

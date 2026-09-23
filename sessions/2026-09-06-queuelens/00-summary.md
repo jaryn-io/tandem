@@ -20,6 +20,10 @@ A self-contained application for exploring a local support-request backlog: impo
 
 The first version would have passed a quick look. What the record shows is the distance between "looks done" and "verified against the brief", and that the distance was covered without the person doing anything after approving the plan.
 
+## The application
+
+The application accepted at closeout is published as delivered, with its tests, at [`examples/queuelens`](../../examples/queuelens). Run it with one command and check the record against the code.
+
 ## Files
 
 `00-brief.md` · `01-plan.md` · `02-record.md` · `03-findings.md` · `04-closeout.md` · `05-positive-memory.md`

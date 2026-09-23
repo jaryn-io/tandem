@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data:; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'none'; object-src 'none';">
+  <title>QueueLens - Support Request Backlog Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Top Application Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-section">
+        <div class="brand-logo">QL</div>
+        <div class="brand-text">
+          <h1>QueueLens <span class="version-tag">Local v1.0</span></h1>
+          <span class="tagline">Support Request Backlog Explorer & Duplicate Detector</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Sample Data Loaders -->
+        <button id="sample-standard-btn" class="btn btn-secondary btn-sm" title="Load realistic 20-ticket backlog">
+          📂 Load Clean Sample
+        </button>
+        <button id="sample-issues-btn" class="btn btn-secondary btn-sm" title="Load backlog with malformed rows and duplicates">
+          ⚡ Load Sample w/ Edge Cases
+        </button>
+
+        <!-- Import Button -->
+        <button id="import-btn" class="btn btn-secondary btn-sm">
+          ⬆ Import CSV / JSON
+        </button>
+        <input type="file" id="file-input" accept=".csv,.json,text/csv,application/json" style="display: none;">
+
+        <!-- Export Dropdown -->
+        <div class="dropdown-wrapper">
+          <button id="export-dropdown-btn" class="btn btn-primary btn-sm">
+            ⬇ Export View ▾
+          </button>
+          <div id="export-menu" class="dropdown-menu">
+            <div class="dropdown-header">Export Current Filtered View</div>
+            <button id="export-filtered-csv" class="dropdown-item">Export Filtered as CSV</button>
+            <button id="export-filtered-json" class="dropdown-item">Export Filtered as JSON</button>
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">Export Checked Records</div>
+            <button id="export-selected-csv" class="dropdown-item disabled">Export Selected as CSV (0)</button>
+            <button id="export-selected-json" class="dropdown-item disabled">Export Selected as JSON (0)</button>
+          </div>
+        </div>
+
+        <!-- Badges & Diagnostics -->
+        <button id="duplicates-badge-btn" class="badge-btn duplicates" style="display: none;" title="Inspect detected duplicate clusters">
+          ⚡ Duplicates
+        </button>
+        <button id="diagnostics-badge-btn" class="badge-btn success" style="display: none;" title="Inspect malformed records and missing field diagnostics">
+          ✓ Clean Ingestion
+        </button>
+
+        <!-- Theme Toggle -->
+        <button id="theme-toggle-btn" class="btn btn-outline btn-sm" title="Toggle Light / Dark mode">
+          🌙 Dark
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Application Body -->
+  <main class="app-container">
+    <!-- Stats Strip -->
+    <section class="stats-strip" aria-label="Backlog Statistics">
+      <div class="stat-card">
+        <span class="stat-label">Total Backlog</span>
+        <div class="stat-value-row">
+          <span id="stat-total" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Matching Filters</span>
+        <div class="stat-value-row">
+          <span id="stat-filtered" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Urgent & High</span>
+        <div class="stat-value-row">
+          <span id="stat-urgent" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Open / In Progress</span>
+        <div class="stat-value-row">
+          <span id="stat-open" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Unassigned</span>
+        <div class="stat-value-row">
+          <span id="stat-unassigned" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Duplicate Tickets</span>
+        <div class="stat-value-row">
+          <span id="stat-duplicates" class="stat-value">0</span>
+        </div>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ingestion Health</span>
+        <div class="stat-value-row">
+          <span id="stat-health-badge" class="stat-badge clean">100% Clean</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search & Filters Control Bar -->
+    <section class="filter-bar" aria-label="Filters and Search Controls">
+      <div class="filter-row">
+        <!-- Search -->
+        <div class="search-group">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search by title, description, ID, customer, tags, or notes...">
+          <button id="clear-search-btn" class="search-clear-btn" title="Clear search">&times;</button>
+        </div>
+
+        <!-- Priority Filter -->
+        <select id="priority-filter" class="select-filter" aria-label="Filter by Priority">
+          <option value="ALL">All Priorities</option>
+          <option value="Urgent">Urgent</option>
+          <option value="High">High</option>
+          <option value="Medium">Medium</option>
+          <option value="Low">Low</option>
+        </select>
+
+        <!-- Status Filter -->
+        <select id="status-filter" class="select-filter" aria-label="Filter by Status">
+          <option value="ALL">All Statuses</option>
+          <option value="Open">Open</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Pending Customer">Pending Customer</option>
+          <option value="Resolved">Resolved</option>
+          <option value="Closed">Closed</option>
+        </select>
+
+        <!-- Assignee Filter (dynamically populated) -->
+        <select id="assignee-filter" class="select-filter" aria-label="Filter by Assignee">
+          <option value="ALL">All Assignees</option>
+        </select>
+
+        <!-- Duplicate Filter -->
+        <select id="duplicate-filter" class="select-filter" aria-label="Filter by Duplicate State">
+          <option value="ALL">All Tickets</option>
+          <option value="DUPLICATES_ONLY">⚡ Duplicates Only</option>
+          <option value="PRIMARY_ONLY">★ Primary Records Only</option>
+          <option value="UNIQUE_ONLY">✓ Non-Duplicate Unique</option>
+        </select>
+
+        <!-- Sort by -->
+        <select id="sort-field" class="select-filter" aria-label="Sort by Field">
+          <option value="created_at">Sort: Created Date</option>
+          <option value="priority">Sort: Priority</option>
+          <option value="title">Sort: Title</option>
+          <option value="id">Sort: ID</option>
+          <option value="status">Sort: Status</option>
+        </select>
+        <button id="sort-direction-btn" class="btn btn-outline btn-sm" title="Toggle Ascending/Descending">
+          ▼ Desc
+        </button>
+
+        <!-- Reset Button -->
+        <button id="reset-filters-btn" class="btn btn-outline btn-sm" title="Reset all filters">
+          ↺ Reset
+        </button>
+      </div>
+
+      <!-- Active Filter Chips -->
+      <div id="active-filter-chips" class="active-chips-row"></div>
+    </section>
+
+    <!-- Content Actions (Selection & View Switcher) -->
+    <div class="content-action-bar">
+      <div class="selection-controls">
+        <label style="display: flex; align-items: center; gap: 0.4rem; cursor: pointer;">
+          <input type="checkbox" id="select-all-checkbox"> Select All
+        </label>
+        <span id="selection-count-text">0 selected</span>
+      </div>
+
+      <div class="view-controls">
+        <div class="btn-group">
+          <button id="table-view-btn" class="btn-group-item active">Table View</button>
+          <button id="kanban-view-btn" class="btn-group-item">Kanban Board</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table View -->
+    <div id="table-view-container" class="table-container">
+      <table class="tickets-table" aria-label="Support Requests Table">
+        <thead>
+          <tr>
+            <th class="td-checkbox"></th>
+            <th class="td-id">ID</th>
+            <th style="width: 100px;">Priority</th>
+            <th style="width: 140px;">Status</th>
+            <th class="td-title">Subject & Issue Details</th>
+            <th class="td-assignee">Assignee</th>
+            <th class="td-customer">Customer</th>
+            <th class="td-dup">Duplicate</th>
+            <th class="td-date">Created</th>
+            <th class="td-actions">View</th>
+          </tr>
+        </thead>
+        <tbody id="tickets-table-body">
+          <!-- Populated by app.js -->
+        </tbody>
+      </table>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state-box" style="display: none;">
+        <div class="empty-icon">📭</div>
+        <div class="empty-title">No support requests match your criteria</div>
+        <div class="empty-desc">Try clearing or adjusting search terms and filters, or load sample backlog data.</div>
+        <button id="empty-reset-filters-btn" class="btn btn-primary btn-sm">
+          Reset All Filters
+        </button>
+      </div>
+    </div>
+
+    <!-- Kanban View -->
+    <div id="kanban-view-container" class="kanban-board" style="display: none;">
+      <!-- Populated by app.js -->
+    </div>
+  </main>
+
+  <!-- ================= Modals ================= -->
+
+  <!-- 1. Ticket Detail Modal -->
+  <div id="ticket-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-dialog lg">
+      <div class="modal-header">
+        <h3>Support Request Details</h3>
+        <button id="ticket-modal-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="ticket-modal-content" class="modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Data Quality & Malformed Records Diagnostics Modal -->
+  <div id="diagnostics-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-dialog lg">
+      <div class="modal-header">
+        <h3>Data Ingestion Diagnostics & Record Explainer</h3>
+        <button id="diagnostics-modal-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="diagnostics-modal-body" class="modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button id="export-diagnostics-btn" class="btn btn-secondary btn-sm">Download Diagnostics JSON</button>
+        <button id="diagnostics-modal-close-footer" class="btn btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Duplicate Group Inspector Modal -->
+  <div id="duplicate-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-dialog lg">
+      <div class="modal-header">
+        <h3>Duplicate Groups & Cluster Inspector</h3>
+        <button id="duplicate-modal-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div id="duplicate-modal-body" class="modal-body">
+        <!-- Rendered dynamically -->
+      </div>
+      <div class="modal-footer">
+        <button id="duplicate-modal-close-footer" class="btn btn-primary btn-sm">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Import / Drop Modal -->
+  <div id="import-modal" class="modal-overlay" aria-hidden="true" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h3>Import Support Backlog (CSV or JSON)</h3>
+        <button id="import-modal-close" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="drop-zone" class="drop-zone">
+          <div class="drop-icon">📁</div>
+          <div class="drop-title">Drop your CSV or JSON file here</div>
+          <div class="drop-hint">or click to browse your local computer</div>
+        </div>
+
+        <div class="paste-box-section">
+          <h4>Or paste raw CSV / JSON text directly:</h4>
+          <textarea id="raw-paste-input" class="raw-paste-input" placeholder="Paste comma-separated rows or JSON ticket array..."></textarea>
+          <button id="process-paste-btn" class="btn btn-secondary btn-sm">Process Pasted Text</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Scripts: 100% local, self-contained -->
+  <script src="sample-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

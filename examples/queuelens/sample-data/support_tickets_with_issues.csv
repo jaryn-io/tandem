@@ -1,0 +1,13 @@
+id,title,description,priority,status,assignee,customer,created_at,tags,channel
+TICK-2001,Production database replication lag spike,"Replication lag increased past 45 seconds on replica-east-02.",Urgent,Open,Sarah Chen,Acme Corp,2026-08-29T10:00:00Z,database,Alert
+TICK-2002,Production database replication lag spike,"Replication lag increased past 45 seconds on replica-east-02.",Urgent,Open,Sarah Chen,Acme Corp,2026-08-29T10:02:00Z,database,Email
+TICK-2003,User unable to download CSV reports,"Reports page shows spinner indefinitely when clicking Download CSV.",,Open,Alex Rivera,Globex,2026-08-29T10:15:00Z,reporting,Portal
+TICK-2004,Missing billing address on subscription renewal,"Need to add PO box to account invoice.",Low,,David Kim,Initech,2026-08-29T10:20:00Z,billing,Email
+TICK-2005,Broken image links in knowledge base articles,"Screenshots in article KB-402 return 404.",Medium,Pending,,Hooli,2026-08-29T10:30:00Z,docs,Portal
+
+,,,,,,,,
+TICK-2006,,"Empty title ticket with description only.",High,Open,Alex Rivera,Umbrella,2026-08-29T10:45:00Z,,Chat
+,Missing ID completely,"This ticket has no ID at all, but has a title and description.",Medium,Open,,Cyberdyne,2026-08-29T11:00:00Z,test,Email
+TICK-2007,Broken unclosed quote record,"This description starts a quote that does not end properly,High,Open,David Kim,Stark,2026-08-29T11:10:00Z
+TICK-2008,Extra columns row,"Normal description",Low,Resolved,Elena Rostova,Wayne,2026-08-29T11:20:00Z,extra1,extra2,extra3,extra4
+TICK-2009,Valid ticket after corrupted lines,"Ensuring parser recovers gracefully and continues processing downstream tickets.",High,Open,Sarah Chen,Pied Piper,2026-08-29T11:30:00Z,recovery,Portal

@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "machines": [
+    {
+      "id": "M1",
+      "name": "Mill",
+      "shortName": "M1",
+      "code": "M1",
+      "workCenter": "Milling",
+      "hourlyRate": -50,
+      "color": "red; background-image: url(javascript:alert(1))"
+    }
+  ],
+  "outages": [],
+  "jobs": [
+    {
+      "id": "JOB-1",
+      "customer": "Cust",
+      "partName": "Part",
+      "quantity": -5,
+      "dueDateSlot": 999,
+      "priority": "CRITICAL_INJECTION",
+      "color": "blue"
+    }
+  ],
+  "operations": [
+    {
+      "id": "OP-1",
+      "jobId": "JOB-NONEXISTENT",
+      "seq": 0,
+      "name": "Op 1",
+      "machineId": "M999",
+      "setupHours": -1,
+      "runHours": -2,
+      "startSlot": -5,
+      "endSlot": -10
+    }
+  ]
+}
