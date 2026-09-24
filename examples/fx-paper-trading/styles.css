@@ -1,0 +1,162 @@
+:root {
+  --bg: #0f1419;
+  --panel: #1a222b;
+  --panel-edge: #2a3642;
+  --text: #dbe4ec;
+  --muted: #8b9aa8;
+  --up: #35c48d;
+  --down: #ef5d6b;
+  --warn: #e0a63c;
+  --ok: #35c48d;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 14px/1.45 "Segoe UI", system-ui, sans-serif;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 12px 20px;
+  background: var(--panel);
+  border-bottom: 1px solid var(--panel-edge);
+}
+.topbar h1 { font-size: 18px; margin: 0; }
+.feed-status { display: flex; align-items: center; gap: 12px; }
+.feed-note { color: var(--muted); font-size: 12px; }
+
+main { padding: 16px 20px; display: grid; gap: 24px; }
+section h2 { font-size: 15px; margin: 0 0 10px; }
+.src-note { color: var(--muted); font-weight: normal; font-size: 12px; }
+
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.badge-ok { background: rgba(53, 196, 141, 0.15); color: var(--ok); }
+.badge-warn { background: rgba(224, 166, 60, 0.15); color: var(--warn); }
+.badge-bad { background: rgba(239, 93, 107, 0.15); color: var(--down); }
+
+.watch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 12px;
+}
+.watch-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+.watch-card h3 { margin: 0 0 6px; font-size: 14px; display: flex; justify-content: space-between; }
+.watch-card .desc { color: var(--muted); font-weight: normal; font-size: 12px; }
+
+.prices { display: flex; gap: 18px; margin: 8px 0; }
+.price-block { display: grid; }
+.price-block .label { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+.price-block .value { font-size: 20px; font-variant-numeric: tabular-nums; }
+.price-block .value.bid { color: var(--down); }
+.price-block .value.ask { color: var(--up); }
+.dir-up { color: var(--up); }
+.dir-down { color: var(--down); }
+
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; font-size: 12px; color: var(--muted); }
+.meta b { color: var(--text); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.gate { margin-top: 8px; }
+
+select, input, button {
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--panel-edge);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font: inherit;
+}
+button { cursor: pointer; }
+
+.hint { color: var(--muted); font-size: 12px; }
+.msg-bad { color: var(--down); }
+.convert-panel { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.conv-result { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+/* S02 — portfolios, ticket, positions, orders, blotter */
+.portfolio-create { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 10px; }
+.portfolio-summary { font-size: 13px; margin: 8px 0 0; }
+#portfolio-bar select { margin-top: 10px; }
+
+.ticket-form { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.ticket-form label { display: flex; gap: 6px; align-items: center; color: var(--muted); font-size: 13px; }
+
+.data-table { border-collapse: collapse; font-size: 13px; }
+.data-table th, .data-table td {
+  text-align: left;
+  padding: 4px 14px 4px 0;
+  font-variant-numeric: tabular-nums;
+  border-bottom: 1px solid var(--panel-edge);
+}
+.data-table th { color: var(--muted); font-weight: 600; }
+
+/* S03 — options and risk view */
+.subhead { font-size: 13px; color: var(--muted); margin: 14px 0 6px; }
+.lot-inactive td { color: var(--muted); }
+.delta-pos { color: var(--up); font-weight: 600; }
+.delta-neg { color: var(--down); font-weight: 600; }
+
+/* S04 — terminal layout, chart and analysis */
+.terminal-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 24px;
+}
+.terminal-col { display: grid; gap: 24px; align-content: start; min-width: 0; }
+@media (max-width: 1400px) {
+  .terminal-grid { grid-template-columns: 1fr; }
+}
+
+.chart-controls { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.chart-controls label { color: var(--muted); font-size: 13px; }
+.chart-toggles { display: inline-flex; gap: 10px; margin-left: 8px; }
+.chart-toggles label { color: var(--text); font-size: 12px; }
+.chart-legend {
+  font-size: 12px; color: var(--muted);
+  font-variant-numeric: tabular-nums; margin: 4px 0;
+}
+.chart-canvas {
+  display: block; width: 100%;
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+}
+.chart-sub { margin-top: 8px; }
+.chart-sub h4 { margin: 0 0 4px; font-size: 12px; color: var(--muted); font-weight: 600; }
+
+.analysis-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.analysis-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-edge);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+}
+.analysis-card .label { color: var(--muted); font-size: 11px; text-transform: uppercase; }
+.analysis-card .value { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.analysis-notes { margin: 10px 0 0; padding-left: 18px; }
+.analysis-notes li { margin: 2px 0; }

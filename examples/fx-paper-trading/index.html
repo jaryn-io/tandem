@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FX Paper Trading Terminal</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="vendor/signalr.min.js" defer></script>
+  <script type="module" src="app/main.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <h1>FX Paper Trading Terminal</h1>
+    <div class="feed-status">
+      <span id="connection-state" class="badge badge-warn">connecting</span>
+      <span class="feed-note">simulation only — no order is ever sent to a broker or external account</span>
+    </div>
+  </header>
+
+  <main>
+    <section aria-label="Market watch">
+      <h2>Market watch <span class="src-note">source: biquote public feed</span></h2>
+      <div id="watch-grid" class="watch-grid"></div>
+    </section>
+
+    <section aria-label="Chart">
+      <h2>Chart <span class="src-note">candles from the feed; indicators are display analytics and never execute trades</span></h2>
+      <div id="chart-view"></div>
+    </section>
+
+    <div class="terminal-grid">
+      <div class="terminal-col">
+        <section aria-label="Portfolio">
+          <h2>Portfolio <span class="src-note">paper only — persisted locally in this browser</span></h2>
+          <div id="portfolio-bar"></div>
+        </section>
+
+        <section aria-label="Positions">
+          <h2>Positions</h2>
+          <table class="data-table" id="positions-table">
+            <thead>
+              <tr><th>Symbol</th><th>Net quantity</th><th>Avg open price</th><th>Unrealized P&amp;L</th><th>Realized P&amp;L</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section aria-label="Orders">
+          <h2>Orders</h2>
+          <table class="data-table" id="orders-table">
+            <thead>
+              <tr><th>Order</th><th>Created (UTC)</th><th>Symbol</th><th>Side</th><th>Type</th><th>Quantity</th><th>Status</th><th>Detail</th><th></th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section aria-label="Blotter">
+          <h2>Blotter <span class="src-note">append-only: a later price update never rewrites an earlier execution</span></h2>
+          <table class="data-table" id="blotter-table">
+            <thead>
+              <tr><th>Fill</th><th>Order</th><th>Filled (UTC)</th><th>Symbol</th><th>Side</th><th>Quantity</th><th>Price</th><th>Quote bid/ask</th><th>Source</th><th>Quote time (UTC)</th><th>Realized P&amp;L</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+      </div>
+
+      <div class="terminal-col">
+        <section aria-label="Order ticket">
+          <h2>Order ticket <span class="src-note">market buy fills at ask, market sell at bid; limits fill when an incoming quote reaches the price</span></h2>
+          <div id="order-ticket"></div>
+        </section>
+
+        <section aria-label="FX options">
+          <h2>FX options <span class="src-note">simulated European vanillas — all premiums are model-derived (Garman–Kohlhagen), never observed quotes; the assumed execution spread is shown on every fill</span></h2>
+          <div id="option-ticket"></div>
+          <h3 class="subhead">Option lots</h3>
+          <table class="data-table" id="option-lots-table">
+            <thead>
+              <tr><th>Lot</th><th>Type</th><th>Notional</th><th>Strike</th><th>Expiry</th><th>Assumptions</th><th>Open premium (model)</th><th>Mark (model)</th><th>P&amp;L</th><th>Delta</th><th>Greeks</th><th></th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <h3 class="subhead">Option orders</h3>
+          <table class="data-table" id="option-orders-table">
+            <thead>
+              <tr><th>Order</th><th>Created (UTC)</th><th>Type</th><th>Symbol</th><th>Notional</th><th>Strike · expiry</th><th>Status</th><th>Detail</th><th>Assumptions</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </section>
+
+        <section aria-label="Risk — delta by pair">
+          <h2>Risk — delta by pair <span class="src-note">aggregate signed delta in base currency; spot hedges execute through the same fill gate as the order ticket</span></h2>
+          <div id="risk-view"></div>
+        </section>
+      </div>
+    </div>
+
+    <section aria-label="P&amp;L and analysis">
+      <h2>P&amp;L and analysis <span class="src-note">realized vs unrealized, equity over time, exposure, spread cost, contribution of spot / options / hedges</span></h2>
+      <div id="analysis-panel"></div>
+    </section>
+
+    <section aria-label="Reporting currency conversion">
+      <h2>Reporting-currency conversion input</h2>
+      <div class="convert-panel">
+        <label>Amount <input id="conv-amount" type="number" value="10000" step="any" /></label>
+        <label>From
+          <select id="conv-from"></select>
+        </label>
+        <label>To
+          <select id="conv-to"></select>
+        </label>
+      </div>
+      <p id="conv-result" class="conv-result">—</p>
+      <p id="conv-disclosure" class="hint">Conversion uses only live feed mid quotes; rate and quote timestamp are always shown.</p>
+    </section>
+  </main>
+</body>
+</html>
