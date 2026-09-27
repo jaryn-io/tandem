@@ -118,7 +118,7 @@ stays your choice; no model name lives in the core.
 Tandem is in private preview. Product pages: [jaryn.io/tandem](https://jaryn.io/tandem).
 Tandem opens to a first group of design partners before the public trial:
 if you run long delegated work and want it on Tandem first, write to
-[tandem@jaryn.io](mailto:tandem@jaryn.io). Releases and documentation are
+[info@jaryn.io](mailto:info@jaryn.io). Releases and documentation are
 published here as they ship.
 
 ---

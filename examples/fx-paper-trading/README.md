@@ -1,6 +1,6 @@
 > **About this folder.** This is the application produced by a Tandem session on 24 September 2026, published as delivered. The complete record of that session, every message, is at [`sessions/2026-09-24-fx-paper-trading`](../../sessions/2026-09-24-fx-paper-trading/00-summary.md). It is an internal test deliverable, not client work and not a product: trading is simulated, prices come from a public feed, nothing is ever sent to a broker. Changes made for publication, and nothing else: an MIT licence file added, since the session delivered none; the run path below made relative; three headings that named the session's internal step numbers reworded. Checks: 255/255.
 >
-> Questions: tandem@jaryn.io
+> Questions: info@jaryn.io
 
 # FX Paper Trading and Options Risk Terminal
 

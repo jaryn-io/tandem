@@ -1,6 +1,6 @@
 > **About this folder.** This is the application produced by a Tandem session on 23 September 2026, published as delivered. The complete record of that session, every message, is at [`sessions/2026-09-23-pricelist-import`](../../sessions/2026-09-23-pricelist-import/00-summary.md). It is an internal test deliverable, not client work and not a product. Changes made for publication, and nothing else: an MIT licence file added, since the session delivered none. Tests: 78/78 (`openpyxl` required for the Excel samples).
 >
-> Questions: tandem@jaryn.io
+> Questions: info@jaryn.io
 
 # Supplier price-list import tool
 

@@ -1,6 +1,6 @@
 > **About this folder.** This is the application produced by a Tandem session on 5 September 2026, published as delivered. The complete record of that session, every message, is at [`sessions/2026-09-05-shiftboard`](../../sessions/2026-09-05-shiftboard/00-summary.md). It is an internal test deliverable, not client work and not a product. Changes made for publication, and nothing else: four absolute paths in this README made relative; the copyright line of the licence set to Jaryn. Tests: 19/19.
 >
-> Questions: tandem@jaryn.io
+> Questions: info@jaryn.io
 
 # ShiftBoard — Visual Workshop Job Scheduling & Capacity Planning
 

@@ -1,6 +1,6 @@
 > **About this folder.** This is the application produced by a Tandem session on 6 September 2026, published as delivered. The complete record of that session, every message, is at [`sessions/2026-09-06-queuelens`](../../sessions/2026-09-06-queuelens/00-summary.md). It is an internal test deliverable, not client work and not a product. Changes made for publication, and nothing else: four paths in this README made relative and one sentence about the verification tooling reworded; an MIT licence file added, since the session delivered none. Tests: all passing.
 >
-> Questions: tandem@jaryn.io
+> Questions: info@jaryn.io
 
 # QueueLens — Support Request Backlog Explorer
 

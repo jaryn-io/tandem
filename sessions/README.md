@@ -38,7 +38,7 @@ What you see is the work and the outcome. Internal paths, identifiers, hashes an
 
 The models' prompts and the mechanics of the system are not part of the record, on purpose. The applications themselves live in [`examples/`](../examples), published as delivered, each one linked to its session record.
 
-Questions and design-partner requests: tandem@jaryn.io
+Questions and design-partner requests: info@jaryn.io
 
 ---
 

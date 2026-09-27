@@ -2,7 +2,7 @@
 >
 > The test suite passed 174/174 at closeout. Three lifecycle tests use fixed dates in August 2026 and fail once those dates are more than thirty days in the past, because the application rejects manual check-ins older than thirty days. That is the application's own rule at work, not a regression; the tests were left as written.
 >
-> Questions: tandem@jaryn.io
+> Questions: info@jaryn.io
 
 # ForgeDesk — Makerspace Management Web Application
 

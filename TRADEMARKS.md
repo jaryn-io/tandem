@@ -16,4 +16,4 @@ You may not, without written permission:
 
 Source files of the marks are not published. The images in these repositories are low-resolution renderings with the mark embedded, provided for reference only.
 
-Requests: tandem@jaryn.io
+Requests: info@jaryn.io

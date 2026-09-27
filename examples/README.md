@@ -16,4 +16,4 @@ Sessions whose application is not here yet: [API Contract Explorer](../sessions/
 
 Each application carries its own MIT licence. Jaryn, Tandem and AWOS names and logos are the property of Jaryn, all rights reserved: see [TRADEMARKS.md](../TRADEMARKS.md) and [NOTICE.md](../NOTICE.md).
 
-Questions: tandem@jaryn.io
+Questions: info@jaryn.io
